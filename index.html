@@ -4,15 +4,25 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>T.C.C - Proyecto</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="estilos.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
   <!-- Marca de agua -->
   <div class="watermark">T.C.C</div>
 
+  <!-- Loader -->
+  <div id="loader" class="loader-overlay">
+    <div class="spinner"></div>
+    <p>Cargando...</p>
+  </div>
+
   <!-- Pantalla Bienvenida -->
-  <div class="ventana active" id="ventana-bienvenida">
+  <div class="ventana active animate-in" id="ventana-bienvenida">
     <h1>Bienvenido</h1>
+    <p>Accede o crea una nueva cuenta para continuar</p>
     <button onclick="mostrarVentana('login')">Iniciar Sesión</button>
     <button onclick="mostrarVentana('register')">Registrarse</button>
   </div>
@@ -20,9 +30,16 @@
   <!-- Pantalla Login -->
   <div class="ventana" id="ventana-login">
     <h2>Iniciar Sesión</h2>
-    <input type="email" id="loginEmail" placeholder="Correo">
-    <input type="password" id="loginPassword" placeholder="Contraseña">
+    <div class="input-group">
+      <span>📧</span>
+      <input type="email" id="loginEmail" placeholder="Correo">
+    </div>
+    <div class="input-group">
+      <span>🔒</span>
+      <input type="password" id="loginPassword" placeholder="Contraseña">
+    </div>
     <button onclick="login()">Entrar</button>
+    <p class="link">¿No tienes cuenta? <a href="#" onclick="mostrarVentana('register')">Regístrate aquí</a></p>
     <button class="volver" onclick="mostrarVentana('bienvenida')">Volver</button>
     <p id="loginMensaje"></p>
   </div>
@@ -30,16 +47,32 @@
   <!-- Pantalla Registro -->
   <div class="ventana" id="ventana-register">
     <h2>Crear Cuenta</h2>
-    <input type="email" id="registerEmail" placeholder="Correo">
-    <input type="password" id="registerPassword" placeholder="Contraseña">
+    <div class="input-group">
+      <span>📧</span>
+      <input type="email" id="registerEmail" placeholder="Correo">
+    </div>
+    <div class="input-group">
+      <span>🔒</span>
+      <input type="password" id="registerPassword" placeholder="Contraseña">
+    </div>
     <button onclick="registrar()">Registrar</button>
     <button class="volver" onclick="mostrarVentana('bienvenida')">Volver</button>
     <p id="registerMensaje"></p>
   </div>
 
+  <!-- Pantalla Usuario Logeado -->
+  <div class="ventana" id="ventana-home">
+    <h2>¡Bienvenido!</h2>
+    <p id="userEmail"></p>
+    <button onclick="logout()">Cerrar Sesión</button>
+  </div>
+
+  <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
+
   <script>
+    // Config Firebase
     const firebaseConfig = {
       apiKey: "TU_API_KEY",
       authDomain: "ctcordova-c71e2.firebaseapp.com",
@@ -52,33 +85,56 @@
     const app = firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
 
-    function mostrarVentana(nombre) {
-      document.querySelectorAll(".ventana").forEach(v => v.classList.remove("active"));
-      document.getElementById("ventana-" + nombre).classList.add("active");
+    // Mostrar/Ocultar loader
+    function mostrarLoader(mostrar) {
+      document.getElementById("loader").style.display = mostrar ? "flex" : "none";
     }
 
+    // Cambiar ventanas con animación
+    function mostrarVentana(nombre) {
+      document.querySelectorAll(".ventana").forEach(v => v.classList.remove("active", "animate-in"));
+      const nueva = document.getElementById("ventana-" + nombre);
+      nueva.classList.add("active", "animate-in");
+    }
+
+    // Login
     function login() {
       const email = document.getElementById("loginEmail").value;
       const pass = document.getElementById("loginPassword").value;
+      mostrarLoader(true);
       auth.signInWithEmailAndPassword(email, pass)
         .then(user => {
-          document.getElementById("loginMensaje").innerText = "Bienvenido " + user.user.email;
+          mostrarLoader(false);
+          document.getElementById("userEmail").innerText = "Sesión iniciada como: " + user.user.email;
+          mostrarVentana("home");
         })
         .catch(err => {
-          document.getElementById("loginMensaje").innerText = err.message;
+          mostrarLoader(false);
+          document.getElementById("loginMensaje").innerText = "⚠ " + err.message;
         });
     }
 
+    // Registro
     function registrar() {
       const email = document.getElementById("registerEmail").value;
       const pass = document.getElementById("registerPassword").value;
+      mostrarLoader(true);
       auth.createUserWithEmailAndPassword(email, pass)
         .then(user => {
-          document.getElementById("registerMensaje").innerText = "Cuenta creada: " + user.user.email;
+          mostrarLoader(false);
+          document.getElementById("registerMensaje").innerText = "✅ Cuenta creada: " + user.user.email;
         })
         .catch(err => {
-          document.getElementById("registerMensaje").innerText = err.message;
+          mostrarLoader(false);
+          document.getElementById("registerMensaje").innerText = "⚠ " + err.message;
         });
+    }
+
+    // Logout
+    function logout() {
+      auth.signOut().then(() => {
+        mostrarVentana("bienvenida");
+      });
     }
   </script>
 </body>
