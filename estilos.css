@@ -1,14 +1,15 @@
-/* Fondo con perspectiva */
+/* Fondo degradado animado */
 body {
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: linear-gradient(-45deg, #1a2a6c, #b21f1f, #fdbb2d, #00c6ff);
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(-45deg, #ff9966, #ff5e62, #00c9ff, #92fe9d);
   background-size: 400% 400%;
-  animation: gradientBG 12s ease infinite;
-  color: #fff;
-  perspective: 1200px; /* 🎯 Clave para 3D */
+  animation: gradientBG 10s ease infinite;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  overflow: hidden;
 }
 
 @keyframes gradientBG {
@@ -17,55 +18,78 @@ body {
   100% { background-position: 0% 50%; }
 }
 
-/* Caja vidrio con efecto 3D */
-.login-container {
-  background: rgba(255, 255, 255, 0.12);
-  border-radius: 20px;
-  padding: 2rem;
-  width: 340px;
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  box-shadow: 0 20px 60px rgba(0,0,0,0.6);
-  border: 1px solid rgba(255,255,255,0.2);
+/* Marca de agua */
+.watermark {
+  position: fixed;
+  bottom: 10px;
+  right: 20px;
+  font-size: 2rem;
+  font-weight: bold;
+  color: rgba(255,255,255,0.2);
+  user-select: none;
+  z-index: 1;
+}
+
+/* Vistas */
+.view {
+  display: none;
   text-align: center;
-  transform-style: preserve-3d; /* 🎯 Necesario para rotación 3D */
-}
-
-/* Animación 3D al aparecer */
-.animate-in {
-  animation: flipIn 0.6s ease forwards;
-}
-.animate-out {
-  animation: flipOut 0.6s ease forwards;
-}
-
-@keyframes flipIn {
-  from { opacity: 0; transform: rotateY(-90deg) scale(0.9); }
-  to   { opacity: 1; transform: rotateY(0) scale(1); }
-}
-@keyframes flipOut {
-  from { opacity: 1; transform: rotateY(0) scale(1); }
-  to   { opacity: 0; transform: rotateY(90deg) scale(0.9); }
-}
-
-/* Botones con relieve 3D */
-.login-container button {
   width: 100%;
-  padding: 0.9rem;
-  margin-top: 0.8rem;
+}
+.view.active { display: block; }
+
+/* Tarjeta 3D efecto vidrio */
+.card {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 16px;
+  padding: 2rem;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+  max-width: 320px;
+  margin: auto;
+  transform: perspective(1000px) rotateX(5deg);
+  transition: transform 0.4s;
+}
+.card:hover {
+  transform: perspective(1000px) rotateX(0deg) scale(1.03);
+}
+
+/* Inputs */
+input {
+  display: block;
+  width: 100%;
+  margin: 0.5rem 0;
+  padding: 0.7rem;
+  border-radius: 8px;
   border: none;
-  border-radius: 12px;
+  outline: none;
+  background: rgba(255,255,255,0.8);
+  font-size: 1rem;
+}
+
+/* Botones */
+button {
+  margin-top: 1rem;
+  width: 100%;
+  padding: 0.8rem;
+  border: none;
+  border-radius: 8px;
   font-size: 1rem;
   font-weight: bold;
   color: #fff;
+  background: linear-gradient(90deg, #0072ff, #00c6ff);
   cursor: pointer;
-  background: linear-gradient(145deg, #00c6ff, #0072ff);
-  box-shadow: 4px 4px 10px rgba(0,0,0,0.5),
-              -2px -2px 6px rgba(255,255,255,0.2);
   transition: transform 0.2s, box-shadow 0.2s;
 }
-.login-container button:hover {
-  transform: translateY(-3px) scale(1.05) rotateX(5deg);
-  box-shadow: 6px 6px 15px rgba(0,0,0,0.6),
-              -3px -3px 10px rgba(255,255,255,0.3);
+button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+}
+
+/* Botón volver */
+button.back {
+  background: linear-gradient(90deg, #ff416c, #ff4b2b);
+}
+button.back:hover {
+  transform: scale(1.05) rotate(-1deg);
 }
