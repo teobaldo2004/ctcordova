@@ -1,140 +1,70 @@
-body {
-    font-family: 'Segoe UI', Arial, sans-serif;
-    background: linear-gradient(135deg, #2b5876 0%, #4e4376 100%);
-    margin: 0;
-    padding: 0;
-    min-height: 100vh;
-    position: relative;
-    overflow-x: hidden;
-}
-
-header {
-    background: linear-gradient(90deg, #0074D9 0%, #00c9ff 100%);
-    color: white;
-    text-align: center;
-    padding: 2rem 1rem 1rem 1rem;
-    margin-bottom: 2rem;
-    box-shadow: 0 4px 24px rgba(0,0,0,0.16);
-}
-
-.background-3d-layer {
-    position: absolute;
-    top: 60px;
-    left: 50%;
-    transform: translateX(-50%) rotate(-7deg) scale(1.10);
-    width: 390px;
-    height: 440px;
-    background: linear-gradient(120deg, #ffffffcc 60%, #00b894b3 120%);
-    border-radius: 30px;
-    box-shadow: 0 20px 70px 0 rgba(0,0,0,0.28), 0 1.5px 0 #00cec9 inset;
-    z-index: 0;
-    opacity: 0.19;
-    filter: blur(1.5px);
-    pointer-events: none;
-}
-
-.background-3d-layer2 {
-    position: absolute;
-    top: 80px;
-    left: 50%;
-    transform: translateX(-50%) rotate(5deg) scale(1.06);
-    width: 370px;
-    height: 420px;
-    background: linear-gradient(135deg, #00b894b3 10%, #ffffffcc 100%);
-    border-radius: 34px;
-    box-shadow: 0 12px 40px 0 rgba(0,200,148,0.10);
-    z-index: 1;
-    opacity: 0.17;
-    filter: blur(1.5px);
-    pointer-events: none;
-}
-
 .login-container {
-    position: relative;
-    max-width: 350px;
-    margin: 0 auto;
-    background: linear-gradient(120deg, #ffffff 60%, #e0f7fa 100%);
-    border-radius: 20px;
-    box-shadow:
-        0 10px 36px rgba(0,0,0,0.22),
-        0 1.5px 0 #00b894 inset;
-    padding: 2.5rem 2rem;
-    z-index: 2;
-    backdrop-filter: blur(4px);
-    border: 2px solid #e0e0e0;
-    min-height: 350px;
-    /* Agrega un degradado sutil */
-    transition: box-shadow 0.2s;
+  position: relative;
+  width: 350px;
+  padding: 2.5rem 2rem;
+  /* 🎨 Fondo degradado de la caja */
+  background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(0,198,255,0.25) 100%);
+  backdrop-filter: blur(12px);
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  z-index: 1;
+  animation: fadeIn 1s ease-out;
 }
 
-.login-container:hover {
-    box-shadow:
-        0 16px 50px 0 rgba(0,0,0,0.27),
-        0 2px 0 #00b894 inset;
+/* Título */
+.login-container h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #ffffff;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.5);
+  font-weight: 700;
+  letter-spacing: 1px;
 }
 
-h2 {
-    text-align: center;
-    color: #00b894;
-    margin-bottom: 2rem;
-    text-shadow: 0 1.5px 0 #b2bec3;
-}
-
-label {
-    display: block;
-    margin: 1rem 0 0.5rem;
-    font-weight: 500;
-    color: #333;
-}
-
+/* Inputs */
 input[type="text"],
 input[type="password"] {
-    width: 100%;
-    padding: 0.7rem;
-    margin-bottom: 1rem;
-    border-radius: 6px;
-    border: 1.5px solid #b2bec3;
-    background: linear-gradient(90deg, #f5f6fa 80%, #e0f7fa 100%);
-    font-size: 1rem;
-    box-shadow: 0 1.5px 0 #00b89433 inset;
-    transition: border-color 0.2s, box-shadow 0.2s;
+  width: 100%;
+  padding: 0.9rem;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  background: linear-gradient(90deg, #e0f7fa 0%, #ffffff 100%);
+  color: #333;
+  box-shadow: inset 0 2px 5px rgba(0,0,0,0.2);
+  transition: all 0.3s ease;
 }
 
-input[type="text"]:focus,
-input[type="password"]:focus {
-    border-color: #00b894;
-    outline: none;
-    box-shadow: 0 0 8px #00b89455;
+input:focus {
+  border: 1px solid #00c6ff;
+  box-shadow: 0 0 10px rgba(0, 198, 255, 0.6);
 }
 
+/* Botón */
 button {
-    width: 100%;
-    padding: 0.9rem;
-    background: linear-gradient(90deg, #00b894 0%, #00cec9 100%);
-    color: white;
-    border: none;
-    border-radius: 6px;
-    font-size: 1.07rem;
-    font-weight: 600;
-    cursor: pointer;
-    box-shadow: 0 4px 18px rgba(0, 200, 148, 0.14), 0 1.5px 0 #00b894 inset;
-    transition: background 0.2s, transform 0.1s;
-    margin-top: 0.5rem;
+  width: 100%;
+  padding: 1rem;
+  background: linear-gradient(90deg, #0072ff 0%, #00c6ff 100%);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 18px rgba(0,114,255,0.4);
 }
 
 button:hover {
-    background: linear-gradient(90deg, #0984e3 0%, #00cec9 100%);
-    transform: translateY(-2px) scale(1.04);
+  background: linear-gradient(90deg, #00c6ff 0%, #0072ff 100%);
+  transform: translateY(-2px) scale(1.03);
 }
 
-.error {
-    color: #d63031;
-    text-align: center;
-    margin-top: 0.5rem;
-}
-
-.success {
-    color: #00b894;
-    text-align: center;
-    margin-top: 0.5rem;
+/* Animación suave al cargar */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
 }
