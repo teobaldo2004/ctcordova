@@ -7,83 +7,79 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <!-- Logo tipo marca de agua -->
+  <!-- Marca de agua -->
   <div class="watermark">T.C.C</div>
 
   <!-- Pantalla Bienvenida -->
-  <div class="view active" id="welcomeView">
+  <div class="ventana active" id="ventana-bienvenida">
     <h1>Bienvenido</h1>
-    <button onclick="showView('loginView')">Iniciar Sesión</button>
+    <button onclick="mostrarVentana('login')">Iniciar Sesión</button>
+    <button onclick="mostrarVentana('register')">Registrarse</button>
   </div>
 
   <!-- Pantalla Login -->
-  <div class="view" id="loginView">
-    <div class="card">
-      <h2>Iniciar Sesión</h2>
-      <input type="email" id="loginEmail" placeholder="Correo">
-      <input type="password" id="loginPass" placeholder="Contraseña">
-      <button id="btnLogin">Entrar</button>
-      <p>¿No tienes cuenta? <a href="#" onclick="showView('registerView')">Registrarse</a></p>
-      <button class="back" onclick="showView('welcomeView')">Volver</button>
-    </div>
+  <div class="ventana" id="ventana-login">
+    <h2>Iniciar Sesión</h2>
+    <input type="email" id="loginEmail" placeholder="Correo">
+    <input type="password" id="loginPassword" placeholder="Contraseña">
+    <button onclick="login()">Entrar</button>
+    <button class="volver" onclick="mostrarVentana('bienvenida')">Volver</button>
+    <p id="loginMensaje"></p>
   </div>
 
   <!-- Pantalla Registro -->
-  <div class="view" id="registerView">
-    <div class="card">
-      <h2>Crear Cuenta</h2>
-      <input type="email" id="regEmail" placeholder="Correo">
-      <input type="password" id="regPass" placeholder="Contraseña">
-      <button id="btnRegistrar">Registrarse</button>
-      <button class="back" onclick="showView('loginView')">Volver</button>
-    </div>
+  <div class="ventana" id="ventana-register">
+    <h2>Crear Cuenta</h2>
+    <input type="email" id="registerEmail" placeholder="Correo">
+    <input type="password" id="registerPassword" placeholder="Contraseña">
+    <button onclick="registrar()">Registrar</button>
+    <button class="volver" onclick="mostrarVentana('bienvenida')">Volver</button>
+    <p id="registerMensaje"></p>
   </div>
 
-  <!-- Firebase SDK -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } 
-      from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
-
-    // Configuración Firebase
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
+  <script>
     const firebaseConfig = {
-      apiKey: "AIzaSyCPLKNwLByE30WAXcvyp-DtoiZY7W6A",
+      apiKey: "TU_API_KEY",
       authDomain: "ctcordova-c71e2.firebaseapp.com",
       projectId: "ctcordova-c71e2",
       storageBucket: "ctcordova-c71e2.appspot.com",
       messagingSenderId: "1099351775675",
-      appId: "1:1099351775675:web:7e0cd6cf2d571a9df4c9e9",
-      measurementId: "G-VRC1GJ7S9T"
+      appId: "1:1099351775675:web:7e0dc6cf2d571a9df4c9e9"
     };
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
+    const app = firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
 
-    // Cambiar vistas
-    window.showView = function(viewId) {
-      document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
-      document.getElementById(viewId).classList.add("active");
-    };
+    function mostrarVentana(nombre) {
+      document.querySelectorAll(".ventana").forEach(v => v.classList.remove("active"));
+      document.getElementById("ventana-" + nombre).classList.add("active");
+    }
 
-    // Login
-    document.getElementById("btnLogin").addEventListener("click", () => {
+    function login() {
       const email = document.getElementById("loginEmail").value;
-      const pass = document.getElementById("loginPass").value;
+      const pass = document.getElementById("loginPassword").value;
+      auth.signInWithEmailAndPassword(email, pass)
+        .then(user => {
+          document.getElementById("loginMensaje").innerText = "Bienvenido " + user.user.email;
+        })
+        .catch(err => {
+          document.getElementById("loginMensaje").innerText = err.message;
+        });
+    }
 
-      signInWithEmailAndPassword(auth, email, pass)
-        .then(user => alert("✅ Bienvenido " + user.user.email))
-        .catch(err => alert("⚠ " + err.message));
-    });
-
-    // Registro
-    document.getElementById("btnRegistrar").addEventListener("click", () => {
-      const email = document.getElementById("regEmail").value;
-      const pass = document.getElementById("regPass").value;
-
-      createUserWithEmailAndPassword(auth, email, pass)
-        .then(user => alert("✅ Usuario creado: " + user.user.email))
-        .catch(err => alert("⚠ " + err.message));
-    });
+    function registrar() {
+      const email = document.getElementById("registerEmail").value;
+      const pass = document.getElementById("registerPassword").value;
+      auth.createUserWithEmailAndPassword(email, pass)
+        .then(user => {
+          document.getElementById("registerMensaje").innerText = "Cuenta creada: " + user.user.email;
+        })
+        .catch(err => {
+          document.getElementById("registerMensaje").innerText = err.message;
+        });
+    }
   </script>
 </body>
 </html>
