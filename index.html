@@ -11,8 +11,15 @@
     <h1>Este es mi proyecto ctcordova</h1>
   </header>
 
+  <!-- Ventana bienvenida -->
+  <div id="bienvenida-inicial" class="login-container animate-in">
+    <h2>👋 Bienvenido</h2>
+    <p>Accede a tu cuenta o regístrate para continuar</p>
+    <button onclick="mostrarLogin()">Iniciar Sesión</button>
+  </div>
+
   <!-- Ventana de login / registro -->
-  <div id="login-container" class="login-container animate-in">
+  <div id="login-container" class="login-container" style="display:none;">
     <div class="tabs">
       <button class="tab-button active" onclick="mostrarTab('login', event)">Iniciar Sesión</button>
       <button class="tab-button" onclick="mostrarTab('registro', event)">Registrarse</button>
@@ -39,13 +46,13 @@
     <p id="mensaje"></p>
   </div>
 
-  <!-- Ventana bienvenida -->
+  <!-- Ventana después de login -->
   <div id="bienvenida-container" class="login-container" style="display:none;">
     <h2 id="bienvenida"></h2>
     <button onclick="logout()">Cerrar Sesión</button>
   </div>
 
-  <!-- Firebase SDK v8 (más simple) -->
+  <!-- Firebase SDK v8 -->
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
 
@@ -62,31 +69,26 @@
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
 
+    // Mostrar login
+    function mostrarLogin() {
+      const bienvenida = document.getElementById("bienvenida-inicial");
+      const login = document.getElementById("login-container");
+      bienvenida.classList.add("animate-out");
+      setTimeout(() => {
+        bienvenida.style.display = "none";
+        bienvenida.classList.remove("animate-out");
+        login.style.display = "block";
+        login.classList.add("animate-in");
+        setTimeout(() => login.classList.remove("animate-in"), 400);
+      }, 400);
+    }
+
     // Tabs
     function mostrarTab(tab, e) {
       document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
       document.querySelectorAll('.tab-button').forEach(el => el.classList.remove('active'));
       document.getElementById('tab-' + tab).classList.add('active');
       e.target.classList.add('active');
-    }
-
-    // Animación helpers
-    function showWithAnimation(elementIn, elementOut) {
-      if (elementOut) {
-        elementOut.classList.add("animate-out");
-        setTimeout(() => {
-          elementOut.style.display = "none";
-          elementOut.classList.remove("animate-out");
-
-          elementIn.style.display = "block";
-          elementIn.classList.add("animate-in");
-          setTimeout(() => elementIn.classList.remove("animate-in"), 400);
-        }, 400);
-      } else {
-        elementIn.style.display = "block";
-        elementIn.classList.add("animate-in");
-        setTimeout(() => elementIn.classList.remove("animate-in"), 400);
-      }
     }
 
     // Login
@@ -126,8 +128,27 @@
     // Logout
     function logout() {
       auth.signOut().then(() => {
-        showWithAnimation(document.getElementById("login-container"), document.getElementById("bienvenida-container"));
+        showWithAnimation(document.getElementById("bienvenida-inicial"), document.getElementById("bienvenida-container"));
       });
+    }
+
+    // Reutilizar animaciones
+    function showWithAnimation(elementIn, elementOut) {
+      if (elementOut) {
+        elementOut.classList.add("animate-out");
+        setTimeout(() => {
+          elementOut.style.display = "none";
+          elementOut.classList.remove("animate-out");
+
+          elementIn.style.display = "block";
+          elementIn.classList.add("animate-in");
+          setTimeout(() => elementIn.classList.remove("animate-in"), 400);
+        }, 400);
+      } else {
+        elementIn.style.display = "block";
+        elementIn.classList.add("animate-in");
+        setTimeout(() => elementIn.classList.remove("animate-in"), 400);
+      }
     }
   </script>
 </body>
