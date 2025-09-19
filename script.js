@@ -56,74 +56,9 @@ function registrar() {
     });
 }
 
-// =============================
-// LOGIN
-// =============================
-if (loginForm) {
-  loginForm.addEventListener("submit", (e) => {
-    e.preventDefault();
-    const email = document.getElementById("login-email").value;
-    const password = document.getElementById("login-password").value;
-
-    showLoader("Iniciando sesión...");
-
-    auth.signInWithEmailAndPassword(email, password)
-      .then((userCredential) => {
-        hideLoader();
-        const user = userCredential.user;
-        showMessage(Bienvenido ${user.email}, "success");
-      })
-      .catch((error) => {
-        hideLoader();
-        showMessage(error.message, "error");
-      });
-  });
-}
-
-// =============================
-// REGISTRO
-// =============================
-if (registerForm) {
-  registerForm.addEventListener("submit", (e) => {
-    e.preventDefault();
-    const email = document.getElementById("register-email").value;
-    const password = document.getElementById("register-password").value;
-
-    showLoader("Creando cuenta...");
-
-    auth.createUserWithEmailAndPassword(email, password)
-      .then((userCredential) => {
-        hideLoader();
-        const user = userCredential.user;
-        showMessage(Cuenta creada: ${user.email}, "success");
-      })
-      .catch((error) => {
-        hideLoader();
-        showMessage(error.message, "error");
-      });
-  });
-}
-
-// =============================
-// CERRAR SESIÓN
-// =============================
+// Logout
 function logout() {
-  auth.signOut()
-    .then(() => {
-      showMessage("Has cerrado sesión correctamente", "success");
-    })
-    .catch((error) => {
-      showMessage(error.message, "error");
-    });
+  auth.signOut().then(() => {
+    mostrarVentana("bienvenida");
+  });
 }
-
-// =============================
-// Observador de usuario
-// =============================
-auth.onAuthStateChanged((user) => {
-  if (user) {
-    console.log("Usuario logueado:", user.email);
-  } else {
-    console.log("Ningún usuario logueado");
-  }
-});
